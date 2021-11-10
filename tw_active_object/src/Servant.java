@@ -2,8 +2,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Servant {
-    private int size;
-    private List<Resource> storage;
+    private final int size;
+    private final List<Resource> storage;
 
     public Servant(int storageSize){
         size = storageSize;
