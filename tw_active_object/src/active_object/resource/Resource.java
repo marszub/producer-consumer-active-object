@@ -1,5 +1,8 @@
 package active_object.resource;
 
-// TODO: Implement for Put and Get method in Proxy
+// TODO: Implement
+
+// Resource that can be stored in the Active object
+// i.e. produced and consumed by producers and consumers
 public interface Resource {
 }

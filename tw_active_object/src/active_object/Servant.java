@@ -5,6 +5,7 @@ import active_object.resource.Resource;
 import java.util.LinkedList;
 import java.util.List;
 
+// Synchronous data structure on which operations served by the Active Object are performed.
 public class Servant {
     private final int size;
     private final List<Resource> storage;
@@ -14,7 +15,7 @@ public class Servant {
         storage = new LinkedList<>();
     }
 
-    // Message queue operations
+    // Storage operations
     public void Store(List<Resource> toStore){
         storage.addAll(toStore);
     }

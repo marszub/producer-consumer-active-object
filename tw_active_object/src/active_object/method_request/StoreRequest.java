@@ -5,6 +5,7 @@ import active_object.resource.Resource;
 
 import java.util.List;
 
+// Representation of Proxy.Store method
 public class StoreRequest implements MethodRequest {
     private final Servant servant;
     private List<Resource> toStore;

@@ -5,6 +5,7 @@ import active_object.resource.Resource;
 
 import java.util.List;
 
+// Representation of Proxy.Take method
 public class TakeRequest implements MethodRequest {
     private final Servant servant;
     private final int count;
