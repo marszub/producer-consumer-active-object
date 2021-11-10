@@ -1,8 +1,13 @@
+package active_object.method_request;
+
+import active_object.Servant;
+import active_object.resource.Resource;
+
 import java.util.List;
 
-public class StoreRequest implements MethodRequest{
+public class StoreRequest implements MethodRequest {
     private final Servant servant;
-    List<Resource> toStore;
+    private List<Resource> toStore;
 
     public StoreRequest(Servant servant, List<Resource> toStore){
         this.servant = servant;

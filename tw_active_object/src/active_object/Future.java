@@ -1,3 +1,7 @@
+package active_object;
+
+import active_object.resource.Resource;
+
 public class Future<T extends Resource> {
     private T resource;
     private Boolean isReady;

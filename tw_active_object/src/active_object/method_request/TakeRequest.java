@@ -1,7 +1,11 @@
-import javax.swing.plaf.IconUIResource;
+package active_object.method_request;
+
+import active_object.Servant;
+import active_object.resource.Resource;
+
 import java.util.List;
 
-public class TakeRequest implements MethodRequest{
+public class TakeRequest implements MethodRequest {
     private final Servant servant;
     private final int count;
 

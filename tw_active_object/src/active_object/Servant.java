@@ -1,3 +1,7 @@
+package active_object;
+
+import active_object.resource.Resource;
+
 import java.util.LinkedList;
 import java.util.List;
 
