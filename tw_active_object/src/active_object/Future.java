@@ -15,16 +15,16 @@ public class Future<T> {
         isReady = false;
     }
 
-    public void Set(T resource){
+    public void set(T resource){
         this.resource = resource;
         isReady = true;
     }
 
-    public T Get(){
+    public T get(){
         return resource;
     }
 
-    public boolean IsReady(){
+    public boolean isReady(){
         return isReady;
     }
 }

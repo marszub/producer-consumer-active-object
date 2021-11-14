@@ -17,13 +17,13 @@ public class StoreRequest implements MethodRequest {
 
     @Override
     public void call(Servant servant) {
-        servant.Store(toStore);
-        future.Set(null);
+        servant.store(toStore);
+        future.set(null);
     }
 
     @Override
     public boolean guard(Servant servant) {
-        return servant.HasSpace(toStore.size());
+        return servant.hasSpace(toStore.size());
     }
 
     public Future<Void> getFuture()

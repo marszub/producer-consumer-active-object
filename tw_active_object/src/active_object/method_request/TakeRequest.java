@@ -17,13 +17,13 @@ public class TakeRequest implements MethodRequest {
 
     @Override
     public void call(Servant servant) {
-        List<Resource> taken = servant.Take(count);
+        List<Resource> taken = servant.take(count);
         // TODO: Return to future
     }
 
     @Override
     public boolean guard(Servant servant) {
-        return servant.HasResources(count);
+        return servant.hasResources(count);
     }
 
     public Future<List<Resource>> getFuture()

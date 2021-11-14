@@ -16,22 +16,22 @@ public class Servant {
     }
 
     // Storage operations
-    public void Store(List<Resource> toStore){
+    public void store(List<Resource> toStore){
         storage.addAll(toStore);
     }
 
-    public List<Resource> Take(int count){
+    public List<Resource> take(int count){
         List<Resource> out = storage.subList(0, count);
         storage.removeAll(out);
         return out;
     }
 
     // Predicates
-    public boolean HasSpace(int count){
+    public boolean hasSpace(int count){
         return count <= size - storage.size();
     }
 
-    public boolean HasResources(int count){
+    public boolean hasResources(int count){
         return count <= storage.size();
     }
 }
