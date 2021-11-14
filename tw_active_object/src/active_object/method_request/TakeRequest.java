@@ -7,22 +7,20 @@ import java.util.List;
 
 // Representation of Proxy.Take method
 public class TakeRequest implements MethodRequest {
-    private final Servant servant;
     private final int count;
 
-    public TakeRequest(Servant servant, int count){
-        this.servant = servant;
+    public TakeRequest(int count){
         this.count = count;
     }
 
     @Override
-    public void call() {
+    public void call(Servant servant) {
         List<Resource> taken = servant.Take(count);
         // TODO: Return to future
     }
 
     @Override
-    public boolean guard() {
+    public boolean guard(Servant servant) {
         return servant.HasResources(count);
     }
 }
