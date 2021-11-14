@@ -9,7 +9,7 @@ import java.util.List;
 // Representation of Proxy.Store method
 public class StoreRequest implements MethodRequest {
     private List<Resource> toStore;
-    private Future<Integer> future;
+    private Future<Void> future;
 
     public StoreRequest(List<Resource> toStore){
         this.toStore = toStore;
@@ -18,7 +18,7 @@ public class StoreRequest implements MethodRequest {
     @Override
     public void call(Servant servant) {
         servant.Store(toStore);
-        // TODO: Return to future
+        future.Set(null);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class StoreRequest implements MethodRequest {
         return servant.HasSpace(toStore.size());
     }
 
-    public Future<Integer> getFuture()
+    public Future<Void> getFuture()
     {
         return future;
     }

@@ -13,10 +13,10 @@ public class Proxy {
         this.scheduler = scheduler;
     }
 
-    public Future<Integer> put(List<Resource> resources)
+    public Future<Void> put(List<Resource> resources)
     {
         StoreRequest request = new StoreRequest(resources);
-        Future<Integer> future = request.getFuture();
+        Future<Void> future = request.getFuture();
         scheduler.enqueue(request);
         return future;
     }
