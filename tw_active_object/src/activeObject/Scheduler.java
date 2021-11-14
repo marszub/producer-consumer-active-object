@@ -1,6 +1,6 @@
-package active_object;
+package activeObject;
 
-import active_object.method_request.MethodRequest;
+import activeObject.methodRequest.MethodRequest;
 
 public class Scheduler {
     // TODO: implement Scheduler

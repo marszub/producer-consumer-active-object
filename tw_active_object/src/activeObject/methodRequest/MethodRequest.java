@@ -1,6 +1,6 @@
-package active_object.method_request;
+package activeObject.methodRequest;
 
-import active_object.Servant;
+import activeObject.Servant;
 
 // For every method shared by Proxy, override to represent its call by an object.
 public interface MethodRequest {

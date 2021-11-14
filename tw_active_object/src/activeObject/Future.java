@@ -1,6 +1,4 @@
-package active_object;
-
-import active_object.resource.Resource;
+package activeObject;
 
 // TODO: Add inactive waiting for resource
 

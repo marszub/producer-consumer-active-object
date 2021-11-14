@@ -1,8 +1,8 @@
-package active_object.method_request;
+package activeObject.methodRequest;
 
-import active_object.Future;
-import active_object.Servant;
-import active_object.resource.Resource;
+import activeObject.Future;
+import activeObject.Servant;
+import activeObject.resource.Resource;
 
 import java.util.List;
 

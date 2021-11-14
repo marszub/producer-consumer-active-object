@@ -1,4 +1,4 @@
-package active_object.resource;
+package activeObject.resource;
 
 // TODO: Implement
 

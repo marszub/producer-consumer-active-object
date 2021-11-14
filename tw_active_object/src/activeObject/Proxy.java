@@ -1,8 +1,8 @@
-package active_object;
+package activeObject;
 
-import active_object.method_request.StoreRequest;
-import active_object.method_request.TakeRequest;
-import active_object.resource.Resource;
+import activeObject.methodRequest.StoreRequest;
+import activeObject.methodRequest.TakeRequest;
+import activeObject.resource.Resource;
 
 import java.util.List;
 
