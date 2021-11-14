@@ -18,7 +18,7 @@ public class TakeRequest implements MethodRequest {
     @Override
     public void call(Servant servant) {
         List<Resource> taken = servant.take(count);
-        // TODO: Return to future
+        future.set(taken);
     }
 
     @Override
