@@ -8,7 +8,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-//Todo: Implement everything that's happening it the second thread - calling servant etc.
 public class Scheduler implements Runnable {
     private final Servant servant;
 
@@ -33,17 +32,23 @@ public class Scheduler implements Runnable {
     public void enqueue(MethodRequest request)
     {
         primaryQueueLock.lock();
-        callQueue.offer(request);
-        queueEmptyCondition.signal();
-        primaryQueueLock.unlock();
+        try {
+            callQueue.offer(request);
+            queueEmptyCondition.signal();
+        } finally {
+            primaryQueueLock.unlock();
+        }
     }
 
     public void run ()
     {
         while (true) {
             primaryQueueLock.lock();
-            this.dispatch();
-            primaryQueueLock.unlock();
+            try {
+                this.dispatch();
+            } finally {
+                primaryQueueLock.unlock();
+            }
         }
     }
 
