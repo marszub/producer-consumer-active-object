@@ -47,22 +47,26 @@ public class Scheduler implements Runnable {
         }
     }
 
-    private void tryExecuteStandardRequest() {
+    private MethodRequest getRequest() {
         primaryQueueLock.lock();
         try {
             waitTillNotEmpty();
-            MethodRequest methodRequest = callQueue.remove();
-            if (!priorityCallQueue.isEmpty() && priorityCallQueue.peek().getClass() == methodRequest.getClass()) {
-                priorityCallQueue.add(methodRequest);
-                return;
-            }
-            if (methodRequest.guard(servant)) {
-                methodRequest.call(servant);
-            } else {
-                priorityCallQueue.add(methodRequest);
-            }
+            return callQueue.remove();
         } finally {
             primaryQueueLock.unlock();
+        }
+    }
+
+    private void tryExecuteStandardRequest() {
+        MethodRequest methodRequest = getRequest();
+        if (!priorityCallQueue.isEmpty() && priorityCallQueue.peek().getClass() == methodRequest.getClass()) {
+            priorityCallQueue.add(methodRequest);
+            return;
+        }
+        if (methodRequest.guard(servant)) {
+            methodRequest.call(servant);
+        } else {
+            priorityCallQueue.add(methodRequest);
         }
     }
 
@@ -81,11 +85,8 @@ public class Scheduler implements Runnable {
         if (priorityCallQueue.isEmpty()) {
             tryExecuteStandardRequest();
         } else {
-            if (priorityCallQueue.peek().guard(servant)) {
+            if (priorityCallQueue.peek().guard(servant))
                 priorityCallQueue.remove().call(servant);
-            } else {
-                tryExecuteStandardRequest();
-            }
         }
     }
 
