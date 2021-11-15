@@ -43,31 +43,34 @@ public class Scheduler implements Runnable {
     public void run ()
     {
         while (true) {
-            primaryQueueLock.lock();
-            try {
-                this.dispatch();
-            } finally {
-                primaryQueueLock.unlock();
-            }
+            this.dispatch();
         }
     }
 
-    private void tryExecuteRequest(MethodRequest methodRequest) {
-        if (!priorityCallQueue.isEmpty() && priorityCallQueue.peek().getClass() == methodRequest.getClass()) {
-            priorityCallQueue.add(methodRequest);
-            return;
-        }
-        if (methodRequest.guard(servant)) {
-            methodRequest.call(servant);
-        } else {
-            priorityCallQueue.add(methodRequest);
+    private void tryExecuteStandardRequest() {
+        primaryQueueLock.lock();
+        try {
+            waitTillNotEmpty();
+            MethodRequest methodRequest = callQueue.remove();
+            if (!priorityCallQueue.isEmpty() && priorityCallQueue.peek().getClass() == methodRequest.getClass()) {
+                priorityCallQueue.add(methodRequest);
+                return;
+            }
+            if (methodRequest.guard(servant)) {
+                methodRequest.call(servant);
+            } else {
+                priorityCallQueue.add(methodRequest);
+            }
+        } finally {
+            primaryQueueLock.unlock();
         }
     }
 
     private void waitTillNotEmpty()
     {
         try {
-            queueEmptyCondition.await();
+            while (callQueue.isEmpty())
+                queueEmptyCondition.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -76,20 +79,12 @@ public class Scheduler implements Runnable {
     private void dispatch()
     {
         if (priorityCallQueue.isEmpty()) {
-            if (callQueue.isEmpty()) {
-                waitTillNotEmpty();
-            } else {
-                tryExecuteRequest(callQueue.remove());
-            }
+            tryExecuteStandardRequest();
         } else {
             if (priorityCallQueue.peek().guard(servant)) {
                 priorityCallQueue.remove().call(servant);
             } else {
-                if (callQueue.isEmpty()) {
-                    waitTillNotEmpty();
-                } else {
-                    tryExecuteRequest(callQueue.remove());
-                }
+                tryExecuteStandardRequest();
             }
         }
     }
