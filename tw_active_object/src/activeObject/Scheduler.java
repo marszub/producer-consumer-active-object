@@ -47,6 +47,12 @@ public class Scheduler implements Runnable {
         }
     }
 
+    private void dispatch()
+    {
+        tryExecutePriorityRequest();
+        tryExecuteStandardRequest();
+    }
+
     private MethodRequest getRequest() {
         primaryQueueLock.lock();
         try {
@@ -85,11 +91,5 @@ public class Scheduler implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    private void dispatch()
-    {
-        tryExecutePriorityRequest();
-        tryExecuteStandardRequest();
     }
 }

@@ -22,7 +22,7 @@ public class Future<T> {
         try {
             this.resource = resource;
             isReady = true;
-            notReady.signal();
+            notReady.signalAll();
         } finally {
             lock.unlock();
         }
@@ -42,6 +42,11 @@ public class Future<T> {
     }
 
     public boolean isReady(){
-        return isReady;
+        lock.lock();
+        try {
+            return isReady;
+        } finally {
+            lock.unlock();
+        }
     }
 }
