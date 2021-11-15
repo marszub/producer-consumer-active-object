@@ -70,6 +70,13 @@ public class Scheduler implements Runnable {
         }
     }
 
+    private void tryExecutePriorityRequest() {
+        if (!priorityCallQueue.isEmpty()) {
+            if (priorityCallQueue.peek().guard(servant))
+                priorityCallQueue.remove().call(servant);
+        }
+    }
+
     private void waitTillNotEmpty()
     {
         try {
@@ -82,12 +89,7 @@ public class Scheduler implements Runnable {
 
     private void dispatch()
     {
-        if (priorityCallQueue.isEmpty()) {
-            tryExecuteStandardRequest();
-        } else {
-            if (priorityCallQueue.peek().guard(servant))
-                priorityCallQueue.remove().call(servant);
-        }
+        tryExecutePriorityRequest();
+        tryExecuteStandardRequest();
     }
-
 }
