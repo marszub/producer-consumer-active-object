@@ -10,43 +10,25 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Future<T> {
     private T resource;
     private Boolean isReady;
-    private Lock lock = new ReentrantLock();
-    private Condition notReady = lock.newCondition();
 
     public Future(){
         isReady = false;
     }
 
-    public void set(T resource){
-        lock.lock();
-        try {
-            this.resource = resource;
-            isReady = true;
-            notReady.signalAll();
-        } finally {
-            lock.unlock();
-        }
+    public synchronized void set(T resource){
+        this.resource = resource;
+        isReady = true;
+        this.notifyAll();
+    }
+
+    public synchronized T get() throws InterruptedException {
+        while (!isReady)
+            this.wait();
+        return resource;
 
     }
 
-    public T get() throws InterruptedException {
-        lock.lock();
-        try {
-            while (!isReady)
-                notReady.await();
-            return resource;
-        } finally {
-            lock.unlock();
-        }
-
-    }
-
-    public boolean isReady(){
-        lock.lock();
-        try {
-            return isReady;
-        } finally {
-            lock.unlock();
-        }
+    public synchronized boolean isReady(){
+        return this.isReady;
     }
 }
