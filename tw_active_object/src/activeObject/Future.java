@@ -1,6 +1,8 @@
 package activeObject;
 
-// TODO: Add inactive waiting for resource
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 // Future object is returned for each call of Proxy method
 // Is used to store returned value of methods called on the Servant
@@ -8,18 +10,35 @@ package activeObject;
 public class Future<T> {
     private T resource;
     private Boolean isReady;
+    private Lock lock = new ReentrantLock();
+    private Condition notReady = lock.newCondition();
 
     public Future(){
         isReady = false;
     }
 
     public void set(T resource){
-        this.resource = resource;
-        isReady = true;
+        lock.lock();
+        try {
+            this.resource = resource;
+            isReady = true;
+            notReady.signal();
+        } finally {
+            lock.unlock();
+        }
+
     }
 
-    public T get(){
-        return resource;
+    public T get() throws InterruptedException {
+        lock.lock();
+        try {
+            while (!isReady)
+                notReady.await();
+            return resource;
+        } finally {
+            lock.unlock();
+        }
+
     }
 
     public boolean isReady(){
