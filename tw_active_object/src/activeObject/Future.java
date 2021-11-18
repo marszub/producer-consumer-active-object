@@ -15,6 +15,8 @@ public class Future<T> {
         isReady = false;
     }
 
+
+    //These are synchronized just to allow wait() for inactive waiting
     public synchronized void set(T resource){
         this.resource = resource;
         isReady = true;

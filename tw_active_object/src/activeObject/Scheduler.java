@@ -31,6 +31,7 @@ public class Scheduler implements Runnable {
 
     public void enqueue(MethodRequest request)
     {
+        //This operation is protected, because all client threads and the servant thread can touch this queue
         primaryQueueLock.lock();
         try {
             callQueue.offer(request);
@@ -54,6 +55,7 @@ public class Scheduler implements Runnable {
     }
 
     private MethodRequest getRequest() {
+        //This is protected, because the primary queue can be touched by client threads
         primaryQueueLock.lock();
         try {
             waitTillNotEmpty();
