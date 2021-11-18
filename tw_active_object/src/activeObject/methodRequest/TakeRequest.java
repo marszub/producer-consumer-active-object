@@ -9,10 +9,11 @@ import java.util.List;
 // Representation of Proxy.Take method
 public class TakeRequest implements MethodRequest {
     private final int count;
-    private Future<List<Resource>> future;
+    private final Future<List<Resource>> future;
 
-    public TakeRequest(int count){
+    public TakeRequest(int count) {
         this.count = count;
+        future = new Future<>();
     }
 
     @Override
@@ -26,8 +27,7 @@ public class TakeRequest implements MethodRequest {
         return servant.hasResources(count);
     }
 
-    public Future<List<Resource>> getFuture()
-    {
+    public Future<List<Resource>> getFuture() {
         return future;
     }
 }

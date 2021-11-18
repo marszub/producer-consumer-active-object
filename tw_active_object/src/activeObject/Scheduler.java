@@ -10,17 +10,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Scheduler implements Runnable {
     private final Servant servant;
-
-    private Queue<MethodRequest> callQueue;
-    private Queue<MethodRequest> priorityCallQueue;
-
-    private Lock primaryQueueLock = new ReentrantLock();
-    private Condition queueEmptyCondition = primaryQueueLock.newCondition();
-
     Thread schedulerThread;
+    private final Queue<MethodRequest> callQueue;
+    private final Queue<MethodRequest> priorityCallQueue;
+    private final Lock primaryQueueLock = new ReentrantLock();
+    private final Condition queueEmptyCondition = primaryQueueLock.newCondition();
 
-    public Scheduler(Servant servant)
-    {
+    public Scheduler(Servant servant) {
         this.servant = servant;
         this.callQueue = new LinkedList<>();
         this.priorityCallQueue = new LinkedList<>();
@@ -29,8 +25,7 @@ public class Scheduler implements Runnable {
         this.schedulerThread.start();
     }
 
-    public void enqueue(MethodRequest request)
-    {
+    public void enqueue(MethodRequest request) {
         //This operation is protected, because all client threads and the servant thread can touch this queue
         primaryQueueLock.lock();
         try {
@@ -41,16 +36,14 @@ public class Scheduler implements Runnable {
         }
     }
 
-    public void run ()
-    {
-        while (true) {
+    public void run() {
+        while (true)
             this.dispatch();
-        }
     }
 
-    private void dispatch()
-    {
-        tryExecutePriorityRequest();
+    private void dispatch() {
+        if (tryExecutePriorityRequest())
+            return;
         tryExecuteStandardRequest();
     }
 
@@ -78,15 +71,15 @@ public class Scheduler implements Runnable {
         }
     }
 
-    private void tryExecutePriorityRequest() {
-        if (!priorityCallQueue.isEmpty()) {
-            if (priorityCallQueue.peek().guard(servant))
-                priorityCallQueue.remove().call(servant);
+    private boolean tryExecutePriorityRequest() {
+        if (!priorityCallQueue.isEmpty() && priorityCallQueue.peek().guard(servant)) {
+            priorityCallQueue.remove().call(servant);
+            return true;
         }
+        return false;
     }
 
-    private void waitTillNotEmpty()
-    {
+    private void waitTillNotEmpty() {
         try {
             while (callQueue.isEmpty())
                 queueEmptyCondition.await();
