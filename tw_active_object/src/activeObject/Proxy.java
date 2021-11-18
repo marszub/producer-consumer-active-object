@@ -8,24 +8,22 @@ import java.util.List;
 
 public class Proxy {
     private final Scheduler scheduler;
-    public Proxy(Scheduler scheduler)
-    {
+
+    public Proxy(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
 
-    public Future<Void> put(List<Resource> resources)
-    {
+    public Future<Void> put(List<Resource> resources) {
         StoreRequest request = new StoreRequest(resources);
         Future<Void> future = request.getFuture();
         scheduler.enqueue(request);
         return future;
     }
 
-    public Future<List<Resource>> get(int n)
-    {
+    public Future<List<Resource>> get(int n) {
         TakeRequest request = new TakeRequest(n);
         Future<List<Resource>> future = request.getFuture();
         scheduler.enqueue(request);
-        return  future;
+        return future;
     }
 }

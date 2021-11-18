@@ -26,7 +26,7 @@ class Consumer implements Runnable {
 
             calculations();
 
-            System.out.println(name + " took " + consumption.get());
+            System.out.println(name + " took " + consumption.get().size());
         }
 
         System.out.println(name + " calculated " + calculated);

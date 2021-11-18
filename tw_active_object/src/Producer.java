@@ -36,7 +36,7 @@ public class Producer implements Runnable {
             calculations();
 
             prodSuccess.get();
-            System.out.println(name + " produced " + production);
+            System.out.println(name + " produced " + production.size());
         }
 
         System.out.println(name + " calculated " + calculated);

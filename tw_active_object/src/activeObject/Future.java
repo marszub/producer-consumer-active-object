@@ -14,7 +14,7 @@ public class Future<T> {
     public synchronized void set(T resource) {
         this.resource = resource;
         isReady = true;
-        this.notifyAll();
+        this.notify();
     }
 
     //Synchronized just to allow wait() for inactive waiting
@@ -30,7 +30,7 @@ public class Future<T> {
         return resource;
     }
 
-    public boolean isReady() {
+    public synchronized boolean isReady() {
         return this.isReady;
     }
 }
