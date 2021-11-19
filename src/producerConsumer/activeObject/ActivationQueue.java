@@ -1,6 +1,6 @@
-package activeObject;
+package producerConsumer.activeObject;
 
-import activeObject.methodRequest.MethodRequest;
+import producerConsumer.activeObject.methodRequest.MethodRequest;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -45,8 +45,6 @@ public class ActivationQueue {
         try {
             while (queue.isEmpty())
                 queueEmpty.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        } catch (InterruptedException e) {}
     }
 }
