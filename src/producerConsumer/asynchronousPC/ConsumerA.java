@@ -15,7 +15,7 @@ public class ConsumerA implements Runnable {
     private final Random generator;
     private double calculated;
     private List<Thread> others;
-    public int calculationsCounter;
+    public long calculationsCounter;
     public int accessCounter;
 
     public ConsumerA(String name, Proxy storage, ClientParameters parameters) {
@@ -49,15 +49,14 @@ public class ConsumerA implements Runnable {
                 accessCounter++;
             }
 
-            if(calculationsCounter < parameters.calculations)
-                calculations();
+            calculations();
 
             if(Thread.interrupted())
                 return;
         }
 
         interruptAll();
-        System.out.println(name + " calculated " + calculated);
+        System.err.println(name + " calculated " + calculated);
     }
 
     private Future<List<Resource>> consumeNext(){

@@ -15,7 +15,7 @@ public class ConsumerS implements Runnable {
     private final Random generator;
     private double calculated;
     private List<Thread> others;
-    public int calculationsCounter;
+    public long calculationsCounter;
     public int accessCounter;
 
     public ConsumerS(String name, Storage4Cond storage, ClientParameters parameters) {
@@ -56,7 +56,7 @@ public class ConsumerS implements Runnable {
         }
 
         interruptAll();
-        System.out.println(name + " calculated " + calculated);
+        System.err.println(name + " calculated " + calculated);
     }
 
     private List<Resource> consumeNext(){

@@ -9,9 +9,7 @@ import producerConsumer.synchronousPC.ConsumerS;
 import producerConsumer.synchronousPC.ProducerS;
 import producerConsumer.synchronousPC.Storage4Cond;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,19 +34,44 @@ final class TestParameters{
 }
 
 public class Main {
+    private static long lastCalculations;
+
     public static void main(String[] args) throws IOException {
-        FileWriter fileWriter = new FileWriter("out.txt");
+        File file = new File("err.txt");
+        FileOutputStream fos = new FileOutputStream(file);
+        PrintStream ps = new PrintStream(fos);
+        System.setErr(ps);
+
+        FileWriter fileWriter = new FileWriter("out_1-10_0-5.txt");
         PrintWriter printWriter = new PrintWriter(fileWriter);
+        printWriter.println("Requests, Calculations, Minimal portion, Maximal portion, Operations quantum, Number of threads, Solution, Storage size");
 
-        for (TestParameters.SolutionVersion solution:
-             TestParameters.SolutionVersion.values())
-            for(int i = 1; i <= 30; i++)
-                for(int j = 1; j <= 30; j++) {
-                    ClientParameters clientParameters = new ClientParameters(100000, 100000, 1, 100, j*10);
-                    TestParameters testParameters = new TestParameters(i * 5, solution, 1000);
+        int tests = 0;
+        for(int i = 1; i <= 10; i++)
+            for(int j = 1; j <= 5; j++){
+                lastCalculations = 0;
+                ClientParameters clientParameters = new ClientParameters(100000, 100000, 1, 100, j * 100);
+                TestParameters testParameters = new TestParameters(i*2, TestParameters.SolutionVersion.Asynchronous, 1000);
 
-                    printWriter.println(clientParameters + ", " + testParameters + ", " + runTest(testParameters, clientParameters) / 1000000000.0);
+                tests++;
+                double time = runTest(testParameters, clientParameters) / 1000000000.0;
+                System.out.println(tests*100/450 + "% " + TestParameters.SolutionVersion.Asynchronous + " " + time + " seconds");
+
+                clientParameters = new ClientParameters(100000, lastCalculations, 1, 100, j * 100);
+                printWriter.println(clientParameters + ", " + testParameters + ", " + time);
+
+
+
+
+                testParameters = new TestParameters(i*2, TestParameters.SolutionVersion.Synchronous, 1000);
+
+                tests++;
+                time = runTest(testParameters, clientParameters) / 1000000000.0;
+                System.out.println(tests*100/450 + "% " + TestParameters.SolutionVersion.Synchronous + " " + time + " seconds");
+                printWriter.println(clientParameters + ", " + testParameters + ", " + time);
                 }
+
+
         printWriter.close();
         System.out.println("Success");
     }
@@ -153,6 +176,17 @@ public class Main {
                 System.out.println("Interrupted");
             }
         }
+
+        for (ProducerA producer: producers) {
+            lastCalculations += producer.calculationsCounter;
+        }
+
+        for (ConsumerA consumer: consumers) {
+            lastCalculations += consumer.calculationsCounter;
+        }
+
+        lastCalculations /= producers.size() + consumers.size();
+
 
         long time = nanoTime() - start;
 
