@@ -16,6 +16,6 @@ public final class ClientParameters {
     }
 
     public String toString(){
-        return requests + ", " + calculations + ", " + + minPortion + ", " + maxPortion + ", " + operationsQuantum;
+        return requests + "," + calculations + "," + + minPortion + "," + maxPortion + "," + operationsQuantum;
     }
 }

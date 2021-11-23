@@ -29,7 +29,7 @@ final class TestParameters{
     }
 
     public String toString(){
-        return threadNum + ", " + version + ", " + servantSize;
+        return threadNum + "," + version + "," + servantSize;
     }
 }
 
@@ -42,23 +42,23 @@ public class Main {
         PrintStream ps = new PrintStream(fos);
         System.setErr(ps);
 
-        FileWriter fileWriter = new FileWriter("out_1-10_0-5.txt");
+        FileWriter fileWriter = new FileWriter("out_1-10_1-10.txt");
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        printWriter.println("Requests, Calculations, Minimal portion, Maximal portion, Operations quantum, Number of threads, Solution, Storage size");
+        printWriter.println("Requests,Calculations,Minimal portion,Maximal portion,Operations quantum,Number of threads,Solution,Storage size,Time");
 
         int tests = 0;
         for(int i = 1; i <= 10; i++)
-            for(int j = 1; j <= 5; j++){
+            for(int j = 1; j <= 10; j++){
                 lastCalculations = 0;
-                ClientParameters clientParameters = new ClientParameters(100000, 100000, 1, 100, j * 100);
+                ClientParameters clientParameters = new ClientParameters(20000, 100000, 1, 100, j * 100);
                 TestParameters testParameters = new TestParameters(i*2, TestParameters.SolutionVersion.Asynchronous, 1000);
 
                 tests++;
                 double time = runTest(testParameters, clientParameters) / 1000000000.0;
-                System.out.println(tests*100/450 + "% " + TestParameters.SolutionVersion.Asynchronous + " " + time + " seconds");
+                System.out.println(tests*100/(2*10*10) + "% " + TestParameters.SolutionVersion.Asynchronous + " " + time + " seconds");
 
-                clientParameters = new ClientParameters(100000, lastCalculations, 1, 100, j * 100);
-                printWriter.println(clientParameters + ", " + testParameters + ", " + time);
+                clientParameters = new ClientParameters(20000, lastCalculations, 1, 100, j * 100);
+                printWriter.println(clientParameters + "," + testParameters + "," + time);
 
 
 
@@ -67,8 +67,8 @@ public class Main {
 
                 tests++;
                 time = runTest(testParameters, clientParameters) / 1000000000.0;
-                System.out.println(tests*100/450 + "% " + TestParameters.SolutionVersion.Synchronous + " " + time + " seconds");
-                printWriter.println(clientParameters + ", " + testParameters + ", " + time);
+                System.out.println(tests*100/(2*10*10) + "% " + TestParameters.SolutionVersion.Synchronous + " " + time + " seconds");
+                printWriter.println(clientParameters + "," + testParameters + "," + time);
                 }
 
 

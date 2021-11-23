@@ -66,7 +66,7 @@ public class ConsumerA implements Runnable {
 
     private void calculations() {
         for (int i = 0; i < parameters.operationsQuantum; i++) {
-            calculated = Math.sin(calculated);
+            calculated = Math.sin(1 + calculated);
         }
         calculationsCounter++;
     }

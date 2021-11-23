@@ -48,7 +48,7 @@ public class ConsumerS implements Runnable {
                 accessCounter++;
             }
 
-            if(calculationsCounter < parameters.calculations)
+            for(int i = 0; calculationsCounter < parameters.calculations && i <= parameters.calculations/parameters.requests; i++)
                 calculations();
 
             if(Thread.interrupted())
@@ -66,7 +66,7 @@ public class ConsumerS implements Runnable {
 
     private void calculations() {
         for (int i = 0; i < parameters.operationsQuantum; i++) {
-            calculated = Math.sin(calculated);
+            calculated = Math.sin(1 + calculated);
         }
         calculationsCounter++;
     }
